@@ -15,6 +15,7 @@
 
 - Check existing utils before creating new functions
 - Modify existing code instead of adding similar new functions
+- Inline single-use code — extract to function only if reused or part of public API
 - Keep related functions in same module
 - Functions >200 lines or deep nesting → suggest refactoring
 - 3+ related functions → suggest separate module
@@ -23,9 +24,12 @@
 
 ## Refactoring
 
-- After refactoring → run imports check
-- After refactoring → check and suggest list of unused functions
-- After refactoring → suggest updating rule files if patterns emerged
+- Inline single-use wrapper functions
+- Check for unused functions
+- Check for duplicate implementations across files
+- Consolidate similar functions into parameterized version if it doesn't increase nesting
+- Suggest updating rule files if patterns emerged
+- Run imports check before committing
 
 ## Testing
 
