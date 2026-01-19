@@ -23,6 +23,7 @@
 ## Refactoring
 
 - After refactoring → run imports check
+- After refactoring → check and suggest list of unused functions
 - After refactoring → suggest updating rule files if patterns emerged
 
 ## Testing
