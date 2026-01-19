@@ -15,10 +15,27 @@ Shared coding rules and guidelines for AI coding assistants.
 ### Git Submodule
 
 ```bash
-git submodule add https://github.com/YOUR_USERNAME/llm-coding-rules .rules
+git submodule add https://github.com/tazyvova/llm-coding-rules .rules
 ```
 
-Then symlink or reference files as needed.
+Then create symlinks:
+
+**Linux/Mac/Dev Containers:**
+```bash
+.rules/link-rules.sh
+```
+
+**Windows (run as Administrator):**
+```bat
+.rules\link-rules.bat
+```
+
+**Dev Container (devcontainer.json):**
+```json
+{
+  "postCreateCommand": ".rules/link-rules.sh"
+}
+```
 
 ### Direct Copy
 
