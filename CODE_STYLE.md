@@ -12,11 +12,18 @@
 
 ## Organization
 
+- Check existing utils before creating new functions
 - Modify existing code instead of adding similar new functions
+- Keep related functions in same module
 - Functions >200 lines or deep nesting → suggest refactoring
 - 3+ related functions → suggest separate module
 - Magic constants → suggest moving to config file
 - SQL statements → separate `.sql` files
+
+## Refactoring
+
+- After refactoring → run imports check
+- After refactoring → suggest updating rule files if patterns emerged
 
 ## Testing
 

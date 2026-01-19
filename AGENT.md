@@ -4,13 +4,15 @@ See [CODE_STYLE.md](CODE_STYLE.md) for coding standards.
 
 ## Directory Restrictions
 
+- Verify working directory, cd only if needed
 - Stay within project folder only
 - Access to other directories only after explicit agreement
 
 ## Task Management
 
-- Long tasks → create `.tasks/TODO.md` (gitignored), update after each step
-- Save plans to `.tasks/plans/` (gitignored)
+- Check `.tasks/TODO.md` for pending tasks before starting new work
+- After planning → save todos to `.tasks/TODO.md` (gitignored)
+- Update after completing each step
 - Follow TDD workflow if `TDD.md` exists in project root
 
 ## Debugging
@@ -20,3 +22,4 @@ See [CODE_STYLE.md](CODE_STYLE.md) for coding standards.
 ## Self-Improvement
 
 - If an instruction is given twice → suggest adding it to rule files
+- Commit rule file changes separately from code changes
