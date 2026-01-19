@@ -2,7 +2,8 @@
 
 ## General
 
-- No unnecessary `try-except` — let errors bubble up with stack trace
+- Catch exceptions only when there's a recovery strategy (fallback, retry, default value)
+- No catch-and-reraise without logging — let errors bubble up
 - Prefer explicit arguments over default parameter values
 - Self-documenting code: good names > comments
 - Comments should be short and simple; small functions need no docstrings
