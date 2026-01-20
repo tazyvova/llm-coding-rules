@@ -2,6 +2,18 @@
 
 See [CODE_STYLE.md](CODE_STYLE.md) for coding standards.
 
+## Boundaries
+
+⚠️ **Ask first:**
+- Dependency updates
+- Deleting files
+- Schema/database changes
+
+🚫 **Never:**
+- Commit secrets or credentials
+- Modify `.env` files with real values
+- Force push or rewrite git history
+
 ## Directory Restrictions
 
 - Prefer relative paths over absolute paths
