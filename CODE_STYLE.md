@@ -37,4 +37,5 @@
 
 ## Git
 
-- Commit and PR messages: short and simple
+- Commit messages: short, focus on "why" not "what"
+- Skip obvious actions (rename, delete, move) — git shows these
