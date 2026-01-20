@@ -4,9 +4,14 @@ See [CODE_STYLE.md](CODE_STYLE.md) for coding standards.
 
 ## Directory Restrictions
 
-- Verify working directory, cd only if needed
+- Prefer relative paths over absolute paths
+- Verify working directory before commands; use `cd` only if needed
 - Stay within project folder only
 - Access to other directories only after explicit agreement
+
+## File Operations
+
+- Use `git mv` for renaming/moving files — not copy+delete
 
 ## Task Management
 
