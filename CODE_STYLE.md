@@ -11,6 +11,11 @@
 - Leave `TODO` for legacy concerns or uncertain decisions
 - Group 3+ related parameters into object/dict
 
+## Imports
+
+- All imports at top of file — no inline imports inside functions
+- Exception: circular import avoidance (must add comment explaining why)
+
 ## Organization
 
 - Check existing utils before creating new functions
