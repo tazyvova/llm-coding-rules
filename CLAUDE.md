@@ -1,3 +1,3 @@
 # Claude Instructions
 
-See [AGENT.md](AGENT.md) for agent rules and restrictions.
+See [AGENTS.md](AGENTS.md) for agent rules and restrictions.

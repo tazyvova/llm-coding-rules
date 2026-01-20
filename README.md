@@ -5,10 +5,8 @@ Shared coding rules and guidelines for AI coding assistants.
 ## Files
 
 - `CODE_STYLE.md` — Universal coding standards
-- `AGENT.md` — AI-specific behavior rules
+- `AGENTS.md` — AI-specific behavior rules (AGENTS.md standard)
 - `CLAUDE.md` — Claude Code entry point
-- `GEMINI.md` — Gemini entry point
-- `CODEX.md` — OpenAI Codex entry point
 
 ## Usage
 
