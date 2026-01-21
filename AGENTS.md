@@ -18,8 +18,8 @@ See [CODE_STYLE.md](CODE_STYLE.md) for coding standards.
 
 ## Directory Restrictions
 
-- Prefer relative paths over absolute paths
-- Verify working directory before commands; use `cd` only if needed
+- Use relative paths by default
+- Ask before using `cd` or absolute paths — only if truly needed
 - Stay within project folder only
 - Access to other directories only after explicit agreement
 
