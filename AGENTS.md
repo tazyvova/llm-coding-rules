@@ -1,5 +1,7 @@
 # Agent Rules
 
+@CODE_STYLE.md
+
 See [CODE_STYLE.md](CODE_STYLE.md) for coding standards.
 
 ## Boundaries
@@ -40,3 +42,11 @@ See [CODE_STYLE.md](CODE_STYLE.md) for coding standards.
 
 - If an instruction is given twice → suggest adding it to rule files
 - Commit rule file changes separately from code changes
+
+## Progress Reporting
+
+- Show tokens remaining during long tasks (use `/context` to check)
+
+## Confirmation
+
+After reading this file and full load [CODE_STYLE.md](CODE_STYLE.md), respond how many lines of rules are loaded
