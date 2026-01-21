@@ -30,6 +30,10 @@ See [CODE_STYLE.md](CODE_STYLE.md) for coding standards.
 ## Task Management
 
 - Check `.tasks/TODO.md` for pending tasks before starting new work
+- Use "AS IS / TO BE" format for plans:
+  - **AS IS** — current state, what's wrong or missing
+  - **TO BE** — desired state after changes
+  - **Files to Change** — list of files with brief description
 - After planning → save todos to `.tasks/TODO.md` (gitignored)
 - Update after completing each step
 - Follow TDD workflow if `TDD.md` exists in project root
