@@ -6,51 +6,57 @@ See [CODE_STYLE.md](CODE_STYLE.md) for coding standards.
 
 ## Boundaries
 
-⚠️ **Ask first:**
+**YOU MUST ask first:**
 - Dependency updates
 - Deleting files
 - Schema/database changes
 
-🚫 **Never:**
+**NEVER do:**
 - Commit secrets or credentials
 - Modify `.env` files with real values
 - Force push or rewrite git history
 
-## Directory Restrictions
+## Paths
 
+**YOU MUST:**
 - Use relative paths by default
-- Ask before using `cd` or absolute paths — only if truly needed
+- Use `git -C path` for submodules — not `cd`
 - Stay within project folder only
 - Access to other directories only after explicit agreement
 
 ## File Operations
 
-- Use `git mv` for renaming/moving files — not copy+delete
+**YOU MUST:**
+- Use `git mv` for renaming/moving — not copy+delete
 
 ## Task Management
 
-- Check `.tasks/TODO.md` for pending tasks before starting new work
-- Use "AS IS / TO BE" format for plans:
-  - **AS IS** — current state, what's wrong or missing
-  - **TO BE** — desired state after changes
-  - **Files to Change** — list of files with brief description
-- After planning → save todos to `.tasks/TODO.md` (gitignored)
+**Before starting work:**
+1. Check `.tasks/TODO.md` for pending tasks
+
+**When planning:**
+- Use "AS IS / TO BE" format:
+  - **AS IS** — current state
+  - **TO BE** — desired state
+  - **Files to Change** — list with brief description
+- Save todos to `.tasks/TODO.md` (gitignored)
 - Update after completing each step
 - Follow TDD workflow if `TDD.md` exists in project root
 
 ## Debugging
 
-- Check `git log` for recent changes before investigating issues
+**Before investigating issues:**
+1. `git log` — check recent changes first
 
 ## Self-Improvement
 
-- If an instruction is given twice → suggest adding it to rule files
-- Commit rule file changes separately from code changes
+- Instruction given twice → suggest adding to rules
+- **Commit rules separately from code**
 
 ## Progress Reporting
 
-- Show tokens remaining during long tasks (use `/context` to check)
+- Show tokens via `/context` during long tasks
 
 ## Confirmation
 
-After reading this file and full load [CODE_STYLE.md](CODE_STYLE.md), respond how many lines of rules are loaded
+After loading rules, respond with line count

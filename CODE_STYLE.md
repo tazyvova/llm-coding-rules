@@ -2,6 +2,7 @@
 
 ## General
 
+**YOU MUST:**
 - Catch exceptions only when there's a recovery strategy (fallback, retry, default value)
 - No catch-and-reraise without logging — let errors bubble up
 - Prefer explicit arguments over default parameter values
@@ -13,11 +14,13 @@
 
 ## Imports
 
+**YOU MUST:**
 - All imports at top of file — no inline imports inside functions
 - Exception: circular import avoidance (must add comment explaining why)
 
 ## Organization
 
+**YOU MUST:**
 - Check existing utils before creating new functions
 - Modify existing code instead of adding similar new functions
 - Inline single-use code — extract to function only if reused or part of public API
@@ -29,20 +32,25 @@
 
 ## Refactoring
 
+**YOU MUST:**
 - Inline single-use wrapper functions
 - Check for unused functions
 - Check for duplicate implementations across files
 - Consolidate similar functions into parameterized version if it doesn't increase nesting
 - Suggest updating rule files if patterns emerged
-- Run imports check before committing
+- Keep original order — don't reorder unless required
 
 ## Testing
 
+**YOU MUST:**
 - Always suggest edge case tests (empty, null, boundaries, errors)
 
 ## Git
 
-- Commit messages: short, focus on "why" not "what"
+**YOU MUST do this before every commit:**
+1. `git diff` — review all changes
+2. `python -c "from module import *"` — check imports
+3. Write short message focused on "why"
+
 - Skip obvious actions (rename, delete, move) — git shows these
-- Check all changes before creating commit message
 - Suggest separate commits if changes are unrelated
