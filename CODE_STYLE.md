@@ -44,3 +44,5 @@
 
 - Commit messages: short, focus on "why" not "what"
 - Skip obvious actions (rename, delete, move) — git shows these
+- Check all changes before creating commit message
+- Suggest separate commits if changes are unrelated
