@@ -16,13 +16,21 @@
 
 ## Tasks
 
-- Check `.tasks/TODO.md` before work
+- Read `PLAN.md` for the current stage spec — do not ask for re-explanation of anything already in PLAN.md
 - Plan format: AS IS → TO BE → Files to Change
 - Follow TDD if `TDD.md` exists
+- After changes: run `npm run compile && npm test`; report result and files changed only
+
+## Output
+
+- Log full implementation details to `/tmp/codex-log.txt`
+- Final response: list of files changed + compile/test result only (one short paragraph)
+- Do not repeat the plan or describe every line changed
 
 ## Debugging
 
 - `git log` — check recent changes first
+- On compile error: fix root cause; never skip `--noEmit` or loosen `tsconfig` without asking
 
 ## Meta
 
