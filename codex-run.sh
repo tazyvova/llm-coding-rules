@@ -69,12 +69,39 @@ files yet." \
   impl)
     LOGFILE="$LOGDIR/${TIMESTAMP}-impl-issue${ISSUE}.jsonl"
     TMPOUT=$(mktemp)
+    TMPVERIFY=$(mktemp)
     codex exec resume --last --dangerously-bypass-approvals-and-sandbox --json \
 "Plan and tests updated. Implement per Issue #${ISSUE}. Do not modify test \
 files — only make them pass. Run npm run compile && npm test." \
       2>&1 | tee "$LOGFILE" | eval "$FILTER" | tee "$TMPOUT"
     post_comment "Codex Implementation Result — Issue #${ISSUE}" "$TMPOUT"
     rm -f "$TMPOUT"
+
+    # Independent host-side verification — Codex self-reports are not trusted.
+    echo "--- host verification ---"
+    if npm run compile 2>&1 | tee "$TMPVERIFY" && npm test 2>&1 | tee -a "$TMPVERIFY"; then
+      gh issue comment "$ISSUE" --repo "$REPO" \
+        --body "### Host verification — Issue #${ISSUE}
+
+\`\`\`
+$(cat "$TMPVERIFY")
+\`\`\`
+
+✅ \`npm run compile && npm test\` passed on host."
+    else
+      gh issue comment "$ISSUE" --repo "$REPO" \
+        --body "### Host verification — Issue #${ISSUE}
+
+\`\`\`
+$(cat "$TMPVERIFY")
+\`\`\`
+
+❌ \`npm run compile && npm test\` failed on host."
+      gh issue edit "$ISSUE" --repo "$REPO" --add-label "blocked"
+      rm -f "$TMPVERIFY"
+      exit 1
+    fi
+    rm -f "$TMPVERIFY"
     ;;
 
   *)
