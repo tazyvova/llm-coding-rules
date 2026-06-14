@@ -36,25 +36,67 @@ Issue body structure:
 ## Contracts  (signatures + behavior, no code)
 ## Files to Change
 ## Test Cases  (descriptions only)
-## Manual smoke-test  (populated before closing)
+## Manual smoke-test  (populated in PR description before merge)
 ```
 
 ---
 
-## Codex Delegation — Multi-Turn Workflow
+## Issue → PR Workflow
 
-1. **QnA turn** — fetch the issue spec and ask Codex for feedback before any code is written:
-   ```
-   .rules/codex-run.sh qna <issue-number>
-   ```
-   Codex response is posted automatically as a comment on the issue.
-   Address the feedback: edit the issue body and/or add failing test stubs as needed.
+### 1. Branch
+Create `feat/#N-short-slug` (or `fix/`, `chore/`) before calling `qna`. Either Claude or the developer may create it — whoever starts the work. Push immediately.
+```
+git checkout -b feat/#N-short-slug
+git push -u origin feat/#N-short-slug
+```
+Add label **`in-progress`** to the issue when the branch is created.
 
-2. **Implement turn** — resume the same session:
-   ```
-   .rules/codex-run.sh impl <issue-number>
-   ```
-   Codex result summary is posted automatically as a comment on the issue.
+### 2. Test-first commit
+Write failing test stubs for all contracted functions and commit them to the branch. The compile failure is intentional — it is the contract Codex implements against. Do not call `qna` before tests exist.
+```
+git commit -m "test: failing stubs for #N"
+```
+
+### 3. Q&A turn
+```
+.rules/codex-run.sh qna <N>
+```
+Codex response is posted as a comment on the issue. Review it: update the issue body and/or test stubs if gaps or ambiguities are found. One round minimum. Repeat if the QnA reveals a fundamental spec problem — update first, then call `qna` again.
+
+### 4. Implement turn
+```
+.rules/codex-run.sh impl <N>
+```
+Codex result summary is posted as a comment on the issue. If tests fail, Codex retries (up to 5 attempts — see AGENTS.md). If still failing after 5 attempts, Codex escalates; Claude decides whether to fix directly (≤40 lines) or revise the spec.
+
+### 5. PR
+After `npm run compile && npm test` passes, open a PR:
+- **Title:** mirrors the issue title
+- **Branch:** `feat/#N-short-slug` → `main`
+- **Body:**
+  ```
+  Closes #N
+
+  ## Summary
+  <one paragraph>
+
+  ## Manual smoke-test
+  - [ ] <item>
+  - [ ] <item>
+  ```
+- Remove label **`in-progress`** from the issue when the PR is opened.
+
+### 6. Merge
+Rebase-and-merge (fast-forward, linear history — no merge commits). Squash only if the branch has noisy WIP commits; agree with the developer first.
+
+---
+
+## Codex Delegation — Script Reference
+
+```
+.rules/codex-run.sh qna  <issue-number>   # QnA feedback, posted as comment
+.rules/codex-run.sh impl <issue-number>   # Implementation, result posted as comment
+```
 
 Full JSONL is saved to `logs/codex/`. Edit `codex-run.sh` to customise prompts.
 
@@ -66,13 +108,15 @@ Full JSONL is saved to `logs/codex/`. Edit `codex-run.sh` to customise prompts.
 
 **Backlog / future work:** open a new issue and assign it to a future milestone. Never add future work to the active milestone's issues.
 
-**Manual smoke-test:** after automated tests pass, list things that cannot be covered by tests and must be verified by hand. Post this as a comment on the issue before closing it.
+**Labels:**
+- `in-progress` — added when branch is created; removed when PR is opened
+- `blocked` — added when Codex escalates after 5 impl failures; removed when unblocked
 
 **Issue completion checklist:**
 1. Automated tests pass (`npm run compile && npm test`).
-2. Update documentation — new features, settings, commands.
-3. Post manual smoke-test comment on the issue.
-4. Close the issue (PR that closes it is preferred — use `Closes #N` in the PR body).
+2. Documentation updated — new features, settings, commands.
+3. Manual smoke-test populated in the PR description.
+4. PR merged with `Closes #N` — issue closes automatically.
 
 **Milestone completion checklist:**
 1. All issues in the milestone are closed.

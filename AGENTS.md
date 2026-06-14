@@ -25,6 +25,22 @@
 - **Never modify existing test files** unless the delegation prompt explicitly says so. Tests are written before delegation to define the contract — rewriting them defeats TDD.
 - After changes: run `npm run compile && npm test`; report result and files changed only.
 
+## Commits
+
+- Message format: `type: description (#N)` where N is the issue number.
+  - `feat: add cvsStatus type annotations (#2)`
+  - `fix: handle empty rlog output (#3)`
+  - `chore: add mocha setup (#3)`
+- One logical change per commit; do not batch unrelated changes.
+
+## Implementation Retries
+
+If `npm run compile && npm test` fails after implementation:
+1. Read the error carefully — fix root cause directly.
+2. Never skip `--noEmit`, loosen `tsconfig`, or modify test files to make tests pass.
+3. Retry up to **5 attempts** total.
+4. After 5 failures: stop. Post a comment on the issue summarising what was tried and what the blocker is. Add label `blocked` to the issue. Wait for architect input.
+
 ## Output
 
 - Full JSONL is saved to `logs/codex/` automatically by `codex-run.sh`.
