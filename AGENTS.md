@@ -56,4 +56,4 @@ If `npm run compile && npm test` fails after implementation:
 
 - Repeated instruction → suggest rule
 - Commit rules separately from code
-- Respond with line count after loading
+- Do not narrate setup steps (loading rules, fetching issues, reading files) — only report if something fails or is missing
