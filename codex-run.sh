@@ -72,7 +72,9 @@ files yet." \
     TMPVERIFY=$(mktemp)
     codex exec resume --last --dangerously-bypass-approvals-and-sandbox --json \
 "Plan and tests updated. Implement per Issue #${ISSUE}. Do not modify test \
-files — only make them pass. Run npm run compile && npm test." \
+files — only make them pass. Run npm run compile && npm test. When the build \
+passes, stage and commit all changed files with message format: \
+'type: description (#${ISSUE})' (type = feat/fix/chore)." \
       2>&1 | tee "$LOGFILE" | eval "$FILTER" | tee "$TMPOUT"
     post_comment "Codex Implementation Result — Issue #${ISSUE}" "$TMPOUT"
     rm -f "$TMPOUT"
