@@ -46,6 +46,7 @@ If `npm run compile && npm test` fails after implementation:
 - Full JSONL is saved to `logs/codex/` automatically by `codex-run.sh`.
 - Final response is posted as a comment on the issue automatically by `codex-run.sh`.
 - Final response format: list of files changed + compile/test result only (one short paragraph). Do not repeat the spec or describe every line changed.
+- **No narration during work:** do not announce what you are about to do, do not explain each function or each file change, do not restate the plan mid-run. Emit output only when something fails or when reporting the final result.
 
 ## Debugging
 
