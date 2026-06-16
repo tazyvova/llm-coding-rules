@@ -129,3 +129,9 @@ Full JSONL is saved to `logs/codex/`. Edit `codex-run.sh` to customise prompts.
 
 - **Never hardcode user-specific paths.** Use runtime-resolved paths (e.g. `os.homedir()`). Hardcoded paths silently fail when the runtime user differs.
 - **Tests define the data contract.** Before delegating to Codex: add failing imports + test cases for all new exported functions. The compile failure is intentional — Codex implements to fix it.
+
+## GitHub CLI Conventions
+
+- **Multiline issue bodies:** always write to `/tmp/issueN-body.md` and pass `--body-file /tmp/issueN-body.md` — never use inline `--body` with multiline strings. The `*` glob in `.claude/settings.json` does not match newlines, so inline multiline bodies trigger a permission prompt every time.
+- **New labels:** create labels before first use — `gh label create "label-name" --color "hex"`. The `blocked` and `in-progress` labels must exist before `codex-run.sh` tries to apply them.
+- **New executable scripts:** stage with `git add <file>` then set the executable bit with `git update-index --chmod=+x <file>`. Plain `chmod +x` may require a session-restart to take effect if `"Bash(chmod *)"` was just added to `.claude/settings.json`.
