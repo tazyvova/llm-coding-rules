@@ -86,7 +86,16 @@ After `npm run compile && npm test` passes, open a PR:
   ```
 - Remove label **`in-progress`** from the issue when the PR is opened.
 
-### 6. Merge
+### 6. Conflict resolution
+If GitHub reports a conflict on the PR:
+```
+git fetch origin main
+git rebase origin/main
+git push --force-with-lease
+```
+If the branch contains commits already in main (same content, different SHA — common after a squash merge), `git rebase` skips them automatically and leaves only the new work. Verify tests still pass before force-pushing.
+
+### 7. Merge
 Rebase-and-merge (fast-forward, linear history — no merge commits). Squash only if the branch has noisy WIP commits; agree with the developer first.
 
 ---
