@@ -144,3 +144,8 @@ Full JSONL is saved to `logs/codex/`. Edit `codex-run.sh` to customise prompts.
 - **Multiline issue bodies:** always write to `/tmp/issueN-body.md` and pass `--body-file /tmp/issueN-body.md` — never use inline `--body` with multiline strings. The `*` glob in `.claude/settings.json` does not match newlines, so inline multiline bodies trigger a permission prompt every time.
 - **New labels:** create labels before first use — `gh label create "label-name" --color "hex"`. The `blocked` and `in-progress` labels must exist before `codex-run.sh` tries to apply them.
 - **New executable scripts:** stage with `git add <file>` then set the executable bit with `git update-index --chmod=+x <file>`. Plain `chmod +x` may require a session-restart to take effect if `"Bash(chmod *)"` was just added to `.claude/settings.json`.
+- **Check PR state before pushing.** Always run `gh pr view <N> --json state` before pushing to a feature branch — the PR may already be merged (rebase-merge creates different SHAs, so `git log` won't show it). Pushing to a merged PR's branch creates orphaned commits that must be cherry-picked to a new branch.
+
+## PR Smoke-test Conventions
+
+- **Pre-tick behavior-covered items.** When opening a PR, mark any smoke-test item `[x]` that is already covered by an automated behavior test, and note which test covers it. This distinguishes "needs manual verification" from "already proven by CI".

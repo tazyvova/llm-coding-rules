@@ -48,6 +48,11 @@ If `npm run compile && npm test` fails after implementation:
 - Final response format: list of files changed + compile/test result only (one short paragraph). Do not repeat the spec or describe every line changed.
 - **No narration during work:** do not announce what you are about to do, do not explain each function or each file change, do not restate the plan mid-run. Emit output only when something fails or when reporting the final result.
 
+## CVS client conventions
+
+- **Use `spawn` not `execFile`/`execFileAsync` for commands with potentially large output** (`cvs -qn update`, `cvs log`, `cvs rlog`). `execFile` buffers all output before resolving — any fixed `maxBuffer` can be exceeded on large repos. Use `spawn` with incremental line collection (separate `outPartial`/`errPartial` buffers, flush on `close`); no ceiling required.
+- **`.cvsignore` applies only to untracked files and new unchecked-out directories — never to tracked files.** P/U (Needs Patch), NM (Needs Merge), and C (Conflict) status entries are for files already tracked in CVS; CVS updates them regardless of `.cvsignore`. Filtering these through `.cvsignore` hides legitimate incoming changes. Only filter: `?` untracked entries, and new directory entries (trailing `/` in `cvs -qn update` output).
+
 ## Debugging
 
 - `git log` — check recent changes first
