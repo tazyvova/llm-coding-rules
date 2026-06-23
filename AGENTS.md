@@ -32,6 +32,7 @@
   - `fix: handle empty rlog output (#3)`
   - `chore: add mocha setup (#3)`
 - One logical change per commit; do not batch unrelated changes.
+- **Push after every commit:** run `git push` immediately after `git commit`. CI runs on push — commits that are not pushed are invisible to CI and to the architect.
 
 ## Implementation Retries
 
