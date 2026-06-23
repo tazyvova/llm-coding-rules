@@ -106,6 +106,16 @@ $(cat "$TMPVERIFY")
       exit 1
     fi
     rm -f "$TMPVERIFY"
+
+    # Push any commits Codex left unpushed, and warn if the push was needed.
+    BRANCH=$(git rev-parse --abbrev-ref HEAD)
+    UNPUSHED=$(git log "origin/${BRANCH}..HEAD" --oneline 2>/dev/null || true)
+    if [[ -n "$UNPUSHED" ]]; then
+      echo "⚠️  WARNING: Codex did not push — pushing now:" >&2
+      echo "$UNPUSHED" >&2
+      git push origin "$BRANCH"
+      echo "✅ Pushed." >&2
+    fi
     ;;
 
   *)
