@@ -23,7 +23,7 @@
   Do not ask for re-explanation of anything already in the issue body or its comments.
 - Issue body format: AS IS → TO BE → Contracts → Files to Change → Test Cases
 - **Never modify existing test files** unless the delegation prompt explicitly says so. Tests are written before delegation to define the contract — rewriting them defeats TDD.
-- After changes: run `npm run compile && npm test`; report result and files changed only.
+- After changes: run `npm run compile && npm test`; report result and files changed only. If changes touch `src/cvsClient.ts` or any `*.behavior.test.ts` file, also run `npm run test:behavior` and include its result in the report.
 
 ## Commits
 
