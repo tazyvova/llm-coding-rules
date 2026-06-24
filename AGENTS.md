@@ -18,7 +18,7 @@
 
 - Read the assigned issue for the current task spec:
   ```
-  gh issue view <N> --json title,body,comments
+  python3 .rules/gh/gh_issue_view.py <N>
   ```
   Do not ask for re-explanation of anything already in the issue body or its comments.
 - Issue body format: AS IS → TO BE → Contracts → Files to Change → Test Cases
