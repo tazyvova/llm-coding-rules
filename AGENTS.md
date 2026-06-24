@@ -53,6 +53,11 @@ If `npm run compile && npm test` fails after implementation:
 
 - **Use `spawn` not `execFile`/`execFileAsync` for commands with potentially large output** (`cvs -qn update`, `cvs log`, `cvs rlog`). `execFile` buffers all output before resolving — any fixed `maxBuffer` can be exceeded on large repos. Use `spawn` with incremental line collection (separate `outPartial`/`errPartial` buffers, flush on `close`); no ceiling required.
 - **`.cvsignore` applies only to untracked files and new unchecked-out directories — never to tracked files.** P/U (Needs Patch), NM (Needs Merge), and C (Conflict) status entries are for files already tracked in CVS; CVS updates them regardless of `.cvsignore`. Filtering these through `.cvsignore` hides legitimate incoming changes. Only filter: `?` untracked entries, and new directory entries (trailing `/` in `cvs -qn update` output).
+- **CVS/Entries revision `'0'` means locally added (scheduled for addition, never committed).** `cvs update -r <rev>` refuses to operate on a file whose Entries line has revision `'0'` — it treats it as "added independently" and aborts. When you need to advance such a file to a server revision, remove its `/filename/0/…` line from `CVS/Entries` first, then run the update; CVS will create a fresh Entries line at the correct revision.
+
+## VS Code API conventions
+
+- **`_open.mergeEditor` requires `input1.uri ≠ output`.** When the local file must be the Current (Left) side, do **not** pass `vscode.Uri.file(localPath)` as both `input1.uri` and `output` — VS Code cannot distinguish the snapshot from the live output and "Accept All Current" writes empty content. Use `CvsDiffProvider.localUri(workDir, filePath)` instead: it returns a virtual `cvs:` scheme URI that serves the file from disk, keeping `input1` and `output` as distinct URIs.
 
 ## Debugging
 
