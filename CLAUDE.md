@@ -98,6 +98,8 @@ If the branch contains commits already in main (same content, different SHA — 
 ### 7. Merge
 Rebase-and-merge (fast-forward, linear history — no merge commits). Squash only if the branch has noisy WIP commits; agree with the developer first.
 
+The repo has **"Automatically delete head branches"** enabled — GitHub deletes the feature branch immediately after merge. No manual cleanup needed.
+
 ---
 
 ## Codex Delegation — Script Reference
