@@ -84,14 +84,11 @@ changed files with message format: \
     # Independent host-side verification — Codex self-reports are not trusted.
     echo "--- host verification ---"
     if npm run compile 2>&1 | tee "$TMPVERIFY" && npm test 2>&1 | tee -a "$TMPVERIFY"; then
+      SUMMARY=$(grep -E '^\s+[0-9]+ (passing|pending|failing)' "$TMPVERIFY" | xargs)
       gh issue comment "$ISSUE" --repo "$REPO" \
         --body "### Host verification — Issue #${ISSUE}
 
-\`\`\`
-$(cat "$TMPVERIFY")
-\`\`\`
-
-✅ \`npm run compile && npm test\` passed on host."
+✅ \`npm run compile && npm test\` passed on host. ${SUMMARY}"
     else
       gh issue comment "$ISSUE" --repo "$REPO" \
         --body "### Host verification — Issue #${ISSUE}
