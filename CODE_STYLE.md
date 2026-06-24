@@ -29,6 +29,10 @@
 
 - Suggest edge cases: empty, null, boundaries, errors
 
+## VS Code Extension
+
+**SCM inline button order:** VS Code sorts `scm/resourceState/context` inline buttons alphabetically by command name, ignoring declaration order in `package.json`. Use `"group": "inline@N"` to enforce position — lower N = leftmost. Destructive actions (Discard/Revert) get `@1`; commit actions (Stage/Add/Unstage) get `@2`.
+
 ## Git
 
 Before commit: `git diff`, check imports, message focused on "why"

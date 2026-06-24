@@ -59,6 +59,8 @@ If `npm run compile && npm test` fails after implementation:
 
 - **`_open.mergeEditor` requires `input1.uri ≠ output`.** When the local file must be the Current (Left) side, do **not** pass `vscode.Uri.file(localPath)` as both `input1.uri` and `output` — VS Code cannot distinguish the snapshot from the live output and "Accept All Current" writes empty content. Use `CvsDiffProvider.localUri(workDir, filePath)` instead: it returns a virtual `cvs:` scheme URI that serves the file from disk, keeping `input1` and `output` as distinct URIs.
 
+- **Brand-new server files (U lines) are invisible to `cvs status`.** `cvs status` only reports files already in local `CVS/Entries`. Files committed by others but never checked out locally appear in `cvs -qn update -d` output as `U` lines but are absent from `CVS/Entries` and thus silently omitted by `cvs status`. Track them separately (e.g. `_newServerFiles`) and re-inject them into the incoming group on every `refresh()` call; drop each entry when `fs.existsSync` confirms it has been checked out.
+
 ## Debugging
 
 - `git log` — check recent changes first
