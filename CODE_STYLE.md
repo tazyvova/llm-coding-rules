@@ -31,6 +31,8 @@
 
 ## VS Code Extension
 
+**No VS Code for the Web support required.** This extension shells out to the `cvs` binary via `child_process` — it cannot run in a browser context. Do not apply web-extension constraints (e.g. avoiding `child_process`, `fs`, `path`). Supported targets: VS Code desktop, Remote SSH, Dev Containers, and Codespaces.
+
 **SCM inline button order:** VS Code sorts `scm/resourceState/context` inline buttons alphabetically by command name, ignoring declaration order in `package.json`. Use `"group": "inline@N"` to enforce position — lower N = leftmost. Destructive actions (Discard/Revert) get `@1`; commit actions (Stage/Add/Unstage) get `@2`.
 
 ## Git
