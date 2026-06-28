@@ -29,6 +29,12 @@
 
 - Suggest edge cases: empty, null, boundaries, errors
 
+## VS Code Extension
+
+**No web-extension constraints** unless the project explicitly targets VS Code for the Web — confirm supported platforms before restricting use of `child_process`, `fs`, or `path`. Typical targets: VS Code desktop, Remote SSH, Dev Containers, Codespaces.
+
+**SCM inline button order:** VS Code sorts `scm/resourceState/context` inline buttons alphabetically by command name, ignoring declaration order in `package.json`. Use `"group": "inline@N"` to enforce position — lower N = leftmost. Destructive actions (Discard/Revert) get `@1`; commit actions (Stage/Add/Unstage) get `@2`.
+
 ## Git
 
 Before commit: `git diff`, check imports, message focused on "why"
