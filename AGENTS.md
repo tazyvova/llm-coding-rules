@@ -23,7 +23,7 @@
   Do not ask for re-explanation of anything already in the issue body or its comments.
 - Issue body format: AS IS → TO BE → Contracts → Files to Change → Test Cases
 - **Never modify existing test files** unless the delegation prompt explicitly says so. Tests are written before delegation to define the contract — rewriting them defeats TDD.
-- After changes: run `npm run compile && npm test`; report result and files changed only. If changes touch `src/cvsClient.ts` or any `*.behavior.test.ts` file, also run `npm run test:behavior` and include its result in the report.
+- After changes: run `npm run compile && npm test`; report result and files changed only.
 
 ## Commits
 
@@ -50,17 +50,9 @@ If `npm run compile && npm test` fails after implementation:
 - **On test failure:** paste only the failing test block(s) — the test name, the error message, and the diff/actual vs expected. Omit all passing test lines. If a fix requires updating a test (e.g. the function signature changed), include the test name and the specific assertion that no longer holds, then explain the fix in one sentence.
 - **No narration during work:** do not announce what you are about to do, do not explain each function or each file change, do not restate the plan mid-run. Emit output only when something fails or when reporting the final result.
 
-## CVS client conventions
-
-- **Use `spawn` not `execFile`/`execFileAsync` for commands with potentially large output** (`cvs -qn update`, `cvs log`, `cvs rlog`). `execFile` buffers all output before resolving — any fixed `maxBuffer` can be exceeded on large repos. Use `spawn` with incremental line collection (separate `outPartial`/`errPartial` buffers, flush on `close`); no ceiling required.
-- **`.cvsignore` applies only to untracked files and new unchecked-out directories — never to tracked files.** P/U (Needs Patch), NM (Needs Merge), and C (Conflict) status entries are for files already tracked in CVS; CVS updates them regardless of `.cvsignore`. Filtering these through `.cvsignore` hides legitimate incoming changes. Only filter: `?` untracked entries, and new directory entries (trailing `/` in `cvs -qn update` output).
-- **CVS/Entries revision `'0'` means locally added (scheduled for addition, never committed).** `cvs update -r <rev>` refuses to operate on a file whose Entries line has revision `'0'` — it treats it as "added independently" and aborts. When you need to advance such a file to a server revision, remove its `/filename/0/…` line from `CVS/Entries` first, then run the update; CVS will create a fresh Entries line at the correct revision.
-
 ## VS Code API conventions
 
-- **`_open.mergeEditor` requires `input1.uri ≠ output`.** When the local file must be the Current (Left) side, do **not** pass `vscode.Uri.file(localPath)` as both `input1.uri` and `output` — VS Code cannot distinguish the snapshot from the live output and "Accept All Current" writes empty content. Use `CvsDiffProvider.localUri(workDir, filePath)` instead: it returns a virtual `cvs:` scheme URI that serves the file from disk, keeping `input1` and `output` as distinct URIs.
-
-- **Brand-new server files (U lines) are invisible to `cvs status`.** `cvs status` only reports files already in local `CVS/Entries`. Files committed by others but never checked out locally appear in `cvs -qn update -d` output as `U` lines but are absent from `CVS/Entries` and thus silently omitted by `cvs status`. Track them separately (e.g. `_newServerFiles`) and re-inject them into the incoming group on every `refresh()` call; drop each entry when `fs.existsSync` confirms it has been checked out.
+_Project-specific VS Code API gotchas go here — add to this section on the project branch._
 
 ## Debugging
 

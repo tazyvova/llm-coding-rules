@@ -10,31 +10,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Build & Test
 
 ```bash
-npm run compile          # TypeScript → out/; also copies test fixtures
-npm test                 # unit tests only (~130 ms, no CVS server needed)
-npm run test:behavior    # integration tests (require a live CVS server, ~1 min)
+npm run compile    # TypeScript → out/
+npm test           # unit tests (no external service needed)
+npm run test:behavior  # integration tests (require a live external service)
 ```
 
 Run a single unit test file after compiling:
 ```bash
-npx mocha --timeout 10000 --require ./out/mocha.setup.js 'out/test/cvsStatus.test.js'
+npx mocha --timeout 10000 --require ./out/mocha.setup.js 'out/test/<file>.test.js'
 ```
 
 ## Architecture
 
-Multi-folder SCM provider. **`extension.ts`** bootstraps one `CvsScmProvider` per workspace folder and registers shared singleton providers: `CvsDiffProvider`, `CvsDecorationProvider`, `AnnotateProvider`, `CvsConflictDecorator`, `ActionLogWebviewViewProvider`, `ActionLogTimelineProvider`.
-
-**`scmProvider.ts`** (1 277 lines) is the core. It owns the six SCM resource groups (Staged Changes, Changes, Untracked Files, Conflicts, ↓ Incoming Changes, ⚠ Incoming Conflicts) and drives the refresh cycle. Refresh merges:
-- `cvs status` output (→ `cvsStatus.ts` parser) for locally-known files
-- `_newServerFiles` accumulated from `cvs -qn update -d` for brand-new server files that have never been checked out (invisible to `cvs status`)
-
-**`cvsClient.ts`**: thin wrapper around the `cvs` binary. Small-output commands use `execFile`; large-output commands (`-qn update`, `log`, `rlog`) use `spawn` with incremental line collection to avoid buffer limits.
-
-**`diffProvider.ts`** (`CvsDiffProvider`): VS Code `TextDocumentContentProvider` for the `cvs:` scheme. Serves file content at a pinned revision. Critical: `openMergeEditor` requires `input1.uri ≠ output` — pass `CvsDiffProvider.localUri()` (a `cvs:` URI served from disk) as `input1`, not a raw `vscode.Uri.file()`.
-
-**`stagingStore.ts`**: emulates Git staging — CVS has no native staging; the extension records the staged set locally and passes it explicitly to `cvs commit`.
-
-**Pure parsers** (`cvsStatus.ts`, `cvsLog.ts`, `cvsRlog.ts`): no VS Code imports, fully unit-testable. New logic that tests import must live here, not inside host-dependent classes.
+_Add project-specific architecture notes here. Describe the entry point, core orchestrator, external-service client, pure testable modules, and the test split (unit vs. integration)._
 
 ---
 
