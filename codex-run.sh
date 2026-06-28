@@ -17,6 +17,14 @@ set -euo pipefail
 MODE="${1:-}"
 ISSUE="${2:-}"
 
+# Codex leaves a 'sleep infinity' sandbox keeper that never calls wait() on
+# its children, causing thousands of zombie processes to accumulate over time.
+# Kill it on exit so the kernel reaps the zombies immediately.
+_cleanup_codex_sandbox() {
+  pkill -u "$(id -u)" -f '^sleep infinity$' 2>/dev/null || true
+}
+trap _cleanup_codex_sandbox EXIT
+
 if [[ -z "$MODE" || -z "$ISSUE" ]]; then
   echo "Usage: $0 qna|impl <issue-number>" >&2
   exit 1
