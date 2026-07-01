@@ -23,12 +23,19 @@ def main():
     ap.add_argument("--body-file", default="")
     args = ap.parse_args()
 
-    body = ""
     if args.body_file:
         with open(args.body_file) as f:
             body = f.read()
-    else:
+    elif not sys.stdin.isatty():
         body = sys.stdin.read()
+    else:
+        body = ""
+
+    if not body.strip():
+        # A non-interactive caller (e.g. an agent's shell tool) also reports
+        # isatty() == False even when nothing was piped in, so a forgotten
+        # --body-file would otherwise silently create a blank-body issue.
+        sys.exit("error: no body provided — pass --body-file <path> or pipe body text via stdin")
 
     repo_flag = ["--repo", args.repo] if args.repo else []
     milestone_flag = ["--milestone", args.milestone] if args.milestone else []
