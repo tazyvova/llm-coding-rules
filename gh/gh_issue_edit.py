@@ -32,7 +32,13 @@ def main():
             body = f.read()
         extra += ["--body", body]
     elif not sys.stdin.isatty():
-        extra += ["--body", sys.stdin.read()]
+        # A non-interactive caller (e.g. an agent's shell tool) also reports
+        # isatty() == False even when nothing was piped in, so sys.stdin.read()
+        # silently returns "" and would wipe the issue body. Only pass --body
+        # when a piped body was actually provided.
+        stdin_body = sys.stdin.read()
+        if stdin_body:
+            extra += ["--body", stdin_body]
 
     if args.title:
         extra += ["--title", args.title]
