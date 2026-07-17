@@ -58,6 +58,7 @@ _Project-specific VS Code API gotchas go here — add to this section on the pro
 
 - `git log` — check recent changes first
 - On compile error: fix root cause; never skip `--noEmit` or loosen `tsconfig` without asking
+- **CI/API acting up for no reason → check https://www.githubstatus.com before debugging locally.** Symptom pattern: `gh api`/Actions calls return an HTML "Unicorn" 503 page instead of JSON, workflow steps that call the GitHub API (e.g. `release-please-action`) fail in ~10s with that same HTML in the error, and it's inconsistent across endpoints (some `gh` commands work, others don't) — none of that is a local config, token, or workflow-file problem; it's GitHub-side. Confirm via the status page, then just wait and retry — don't chase phantom fixes (rotating tokens, editing workflow YAML, etc.) for an incident that isn't yours to fix.
 
 ## Meta
 
