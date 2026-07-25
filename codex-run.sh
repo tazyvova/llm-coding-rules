@@ -76,10 +76,11 @@ files yet." \
 
   impl)
     # Guard: refuse to run if origin/main is not an ancestor of HEAD.
-    git fetch origin main --quiet
-    if ! git merge-base --is-ancestor origin/main HEAD; then
-      echo "❌ Branch is not based on current origin/main. Rebase first:" >&2
-      echo "   git fetch origin main && git rebase origin/main" >&2
+    DEFAULT_BRANCH=$(git remote show origin 2>/dev/null | awk '/HEAD branch/ {print $NF}')
+    git fetch origin "$DEFAULT_BRANCH" --quiet
+    if ! git merge-base --is-ancestor "origin/${DEFAULT_BRANCH}" HEAD; then
+      echo "❌ Branch is not based on current origin/${DEFAULT_BRANCH}. Rebase first:" >&2
+      echo "   git fetch origin ${DEFAULT_BRANCH} && git rebase origin/${DEFAULT_BRANCH}" >&2
       exit 1
     fi
     LOGFILE="$LOGDIR/${TIMESTAMP}-impl-issue${ISSUE}.jsonl"
