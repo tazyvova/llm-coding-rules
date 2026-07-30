@@ -29,6 +29,16 @@
 
 - Suggest edge cases: empty, null, boundaries, errors
 
+## External processes (CLI tools, subprocesses)
+
+**Non-empty output is not success.** Whenever stderr is merged into stdout — a `2>&1` redirect, or a `spawn` whose handler concatenates both streams — an error message *is* output. So `if (!output) throw` inverts into "any failure is a success": the tool prints a diagnostic, the guard sees a non-empty string, and a total failure is reported to the user as a silent no-op. Detect the tool's actual failure markers in the output, and prefer the exit code where the call style exposes one. Emptiness is the weakest possible signal and should never be the only check.
+
+**A single bad argument can fail every other argument in the same call.** Do not assume a CLI applies itself per-argument and reports per-argument. Some tools abort the whole invocation on the first unusable argument, so batching N paths into one call means one bad path silently discards the other N-1 — and batching is often introduced precisely on the assumption that "this operation has no per-item branching". Verify that assumption against the real binary before batching, and check the abort behavior is not order-dependent (a bad argument last is not safer than first).
+
+**When a batch does abort, the fix is usually structural, not "stop batching".** If arguments fail because of a missing prerequisite (a parent directory not yet fetched, a resource not yet created), the right shape is to satisfy the prerequisite as its own single command and let it cover its whole subtree, then batch what remains. That is normally *fewer* calls than the naive batch, not more — one recursive fetch of a parent replaces one failed call per leaf beneath it. Group work by the tree/dependency structure the tool actually operates on, deduplicating to the shallowest prerequisite so nested cases don't each get their own command.
+
+**Log lines are for humans and may not reflect the real invocation.** A display string built by joining an argv array on spaces is not the command that ran — arguments containing spaces appear indistinguishable from separate arguments, which sends debugging after a quoting bug that does not exist. When a logged command is used as evidence, confirm the execution path (`spawn`/`execFile` with an array vs. a shell string) before trusting it, and prefer a display that quotes arguments needing it.
+
 ## VS Code Extension
 
 **No web-extension constraints** unless the project explicitly targets VS Code for the Web — confirm supported platforms before restricting use of `child_process`, `fs`, or `path`. Typical targets: VS Code desktop, Remote SSH, Dev Containers, Codespaces.
