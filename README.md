@@ -7,6 +7,9 @@ Shared coding rules and guidelines for AI coding assistants.
 - `CODE_STYLE.md` — Universal coding standards
 - `AGENTS.md` — AI-specific behavior rules (AGENTS.md standard)
 - `CLAUDE.md` — Claude Code entry point
+- `CODEX.md` — rules for Codex under `codex-run.sh`; injected into the delegation prompt, never loaded by Claude
+- `skills/` — on-demand Claude Code skills (see below)
+- `hooks/` — hookify rule files, symlinked into `.claude/` by `link-rules.sh`
 - `gh/` — Python wrappers for the `gh` CLI (plain-text output, no JSON parsing needed)
 
 ## Usage
@@ -35,6 +38,11 @@ Then create symlinks:
   "postCreateCommand": ".rules/link-rules.sh"
 }
 ```
+
+`link-rules.sh` also links `.claude/skills` → `.rules/skills` and each
+`.rules/hooks/hookify.*.local.md` into `.claude/`, so skills and hook rules are
+version-controlled here once instead of duplicated per repo. The `.claude/`
+entries are generated — gitignore them in the consuming repo.
 
 ### Direct Copy
 
@@ -66,3 +74,32 @@ python3 .rules/gh/gh_issue_comment.py 42 --body-file /tmp/comment.md
 python3 .rules/gh/gh_pr_view.py
 python3 .rules/gh/gh_pr_create.py --title "feat: foo (#42)" --body-file /tmp/pr-body.md
 ```
+
+## skills/ — on-demand workflow skills
+
+Workflow detail that is only relevant during one step is packaged as skills
+instead of living in `CLAUDE.md`, where it would load into every session.
+
+| Skill | Covers |
+|-------|---------|
+| `write-spec` | Lean spec format, AS IS/TO BE/Contracts template, pure-helper placement, issue sizing |
+| `tdd-stubs` | Failing stubs from a spec's Contracts, pure-module placement, test-suite split, `test: failing stubs for #N` |
+| `issue-to-pr` | Branch → stubs → qna → impl → PR → conflict → merge, gh wrappers, label and milestone lifecycle |
+
+Discovery is via the `.claude/skills` symlink created by `link-rules.sh`. Adding
+a skill = adding `skills/<name>/SKILL.md`; no per-repo wiring.
+
+## hooks/ — hookify rules
+
+Rules for the [hookify](https://github.com/anthropics/claude-plugins-official)
+plugin, which reads `.claude/hookify.*.local.md` at every tool use.
+
+| Rule | Event | Action |
+|------|-------|--------|
+| `warn-test-contract-edit` | Edit/Write under `src/test/*.ts` | warn — stubs are allowed, weakening a test to make an impl pass is not |
+| `warn-push-after-commit` | Bash `git commit` | warn — push immediately; check the PR is not already merged |
+
+Both warn rather than block: writing failing stubs is a legitimate edit to
+`src/test/`, and only a human can tell that from an implementation-driven
+rewrite. Codex runs outside Claude Code and is not covered by these hooks — its
+equivalent rule lives in `CODEX.md`.
