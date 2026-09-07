@@ -46,6 +46,13 @@ SPEC=$(gh issue view "$ISSUE" --repo "$REPO" --json title,body,comments -q '
   else "" end)
 ')
 
+# Codex-only rules live outside AGENTS.md so Claude sessions do not load them.
+# Inject them into every delegation prompt instead.
+CODEX_RULES=""
+if [[ -f .rules/CODEX.md ]]; then
+  CODEX_RULES="$(cat .rules/CODEX.md)"
+fi
+
 post_comment() {
   local header="$1"
   local body_file="$2"
@@ -62,7 +69,11 @@ case "$MODE" in
     LOGFILE="$LOGDIR/${TIMESTAMP}-qna-issue${ISSUE}.jsonl"
     TMPOUT=$(mktemp)
     codex exec -s danger-full-access --json \
-"GitHub Issue #${ISSUE} spec:
+"${CODEX_RULES}
+
+---
+
+GitHub Issue #${ISSUE} spec:
 
 ${SPEC}
 
@@ -87,7 +98,11 @@ files yet." \
     TMPOUT=$(mktemp)
     TMPVERIFY=$(mktemp)
     codex exec resume --last --dangerously-bypass-approvals-and-sandbox --json \
-"Plan and tests updated. Implement per Issue #${ISSUE}. Do not modify test \
+"${CODEX_RULES}
+
+---
+
+Plan and tests updated. Implement per Issue #${ISSUE}. Do not modify test \
 files unless the issue body contains a 'Delegation note' that explicitly \
 permits it — if it does, you may fill in stub bodies. Run \
 npm run compile && npm test. When the build passes, stage and commit all \
