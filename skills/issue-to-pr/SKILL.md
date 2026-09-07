@@ -24,6 +24,14 @@ git commit -m "test: failing stubs for #N"
 git push
 ```
 
+## 2b. Verify the issue's premises
+
+Before `qna`, check the AS IS against the code: counts, file lists, named
+symbols, and any claim about what exists. Post corrections as an issue comment
+and fix the body before delegating. Transferred or rescoped issues describe a
+repository that no longer exists — every M1 issue contained at least one false
+premise, several of which would have shipped broken work.
+
 ## 3. Q&A turn
 
 ```bash
@@ -66,6 +74,10 @@ After `npm run compile && npm test` passes locally:
 - **Pre-tick behavior-covered items.** Mark `[x]` any smoke-test item already
   covered by an automated test and name the test. This separates "needs manual
   verification" from "already proven by CI".
+- **An unchecked item needs a stated reason** naming what specifically is
+  missing. "Needs a rebuild" is not a reason until the cheaper simulation has
+  been tried — staging an artifact outside `node_modules` or replaying
+  `postCreateCommand` over an emptied one has found real defects.
 - Remove label `in-progress`.
 
 ```bash

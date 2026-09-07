@@ -28,6 +28,13 @@
 ## Testing
 
 - Suggest edge cases: empty, null, boundaries, errors
+- Assert the property that must hold, not the value that happens to hold now.
+  Anything a tool or release process rewrites — versions, manifests, generated
+  config — must be asserted by shape or by agreement with another file. A test
+  pinning a literal current value passes when written and fails later, often
+  blocking the process it guards.
+- To assert an option is off, assert `=== false`, not absence. A missing key
+  takes the library's default, which may be the opposite of the intent.
 
 ## VS Code Extension
 
